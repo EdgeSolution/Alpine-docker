@@ -1,7 +1,7 @@
 version: '2'
 services:
      androidlink: 
-        image: edgesolution/androiddm-javaenv:v1.0
+        image: edgesolution/androiddm-javaenv:v1.1
         restart: always
         depends_on:
                 - mqtt
@@ -42,7 +42,7 @@ services:
         networks: 
               - advnet
      astore:
-        image: edgesolution/astore:v1.0
+        image: edgesolution/astore:v1.1
         restart: always
         depends_on:
                 - db
@@ -59,6 +59,20 @@ services:
                 - advnet
         environment: 
                 - TZ=Asia/Shanghai
+     novnc:
+        image: edgesolution/androiddm-novnc:v1.0
+        restart: always
+        volumes:
+                - ./java-env/run-docker-image/vnctoken/:/root/adv/vnctoken/
+                - ./noVnc/log/:/root/adv/log
+        ports:
+                - "9191:9191"
+                - "5901:5901"
+                - "5500:5500"
+        command: /root/adv/run.sh
+        container_name: m2m-novnc
+        networks: 
+                - advnet
 networks:
     advnet:
         driver: bridge
