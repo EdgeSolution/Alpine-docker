@@ -1,14 +1,16 @@
-version: '2'
+version: '3'
 services:
      androidlink: 
-        image: edgesolution/androiddm-javaenv:v1.1
+        image: edgesolution/androiddm-javaenv:v1.2
         restart: always
         depends_on:
                 - mqtt
                 - db
         volumes:
                 - ./java-env/vnctoken:/root/adv/vnctoken 
+                - ./java-env/license:/root/adv/license
                 - ./java-env/logs:/root/logs
+                - ./java-env/solutionAppIcon:/root/adv/solutionAppIcon
                 - /sys:/sys
         ports: 
                 - "8080:8080"
@@ -42,12 +44,13 @@ services:
         networks: 
               - advnet
      astore:
-        image: edgesolution/astore:v1.1
+        image: edgesolution/astore:v1.2
         restart: always
         depends_on:
                 - db
         volumes:
-                - ./astore/logs:/home/logs
+                - ./astore/logs:/root/adv/logs
+                - ./astore/upload:/var/www/html/DEPLOYREPO
         ports:
                 - "30001:30019"
                 - "30002:80"
@@ -73,6 +76,16 @@ services:
         container_name: m2m-novnc
         networks: 
                 - advnet
+     dockerui:
+        image: portainer/portainer
+        restart: always
+        volumes:
+                - /var/run/docker.sock:/var/run/docker.sock
+                - ./portainer_data:/data
+        ports:
+                - "8000:8000"
+                - "9000:9000"
+        container_name: portainer
 networks:
     advnet:
         driver: bridge
