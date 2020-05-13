@@ -3,7 +3,7 @@ This is a Alpine docker image for AndroidDM
 
 Install docker docker-compose git
 
-# apt install docker docker-compose git
+# apt install docker-ce docker-compose git
 
 # v1.2 version
  - New features
